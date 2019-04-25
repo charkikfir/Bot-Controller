@@ -1,0 +1,7 @@
+key.*
+Pipfile.lock
+*.sql
+/.vscode
+/__pycache__
+webcontroller/__pycache__
+*.db
