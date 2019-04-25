@@ -12,6 +12,6 @@ class LoginForm(FlaskForm):
 
 
 class PresenceForm(FlaskForm):
-    new_pr = StringField("New Presence", validators=[Length(max=30)])
+    new_pr = StringField("New Presence", validators=[Length(max=100)])
 
     submit = SubmitField('change')
