@@ -2,6 +2,7 @@ from quart import flask_patch
 
 from quart import render_template, url_for, flash, redirect, request, g
 
+import random
 from multiprocessing import Process, Pipe
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -14,17 +15,30 @@ from bot import start_bot
 
 connections = dict()
 
-#* Don't really have a use for that yet. Maybe the chat will be the default home later
-# @app.route('/home')
-# async def home():
-#     return await render_template('home.html', posts=posts)
+
 @app.route('/chat')
+@app.route('/')
 @login_required
 async def chat():
     con = get_con(current_user.get_id())
     con.send("give_guilds")
-    servers = await get_answer() # servers is a list with dicts that contain the name and id of the guild [{"id": 123, "name": "name1"}, ]
-    return await render_template('chat.html', servers=servers)
+    guilds = await get_answer() # guilds is a list with dicts that contain the name and id of the guild [{"id": 123, "name": "name1"}, ]
+    
+    guild = request.args.get("guild", 0, type=int)
+    chn = request.args.get("channel", 0, type=int)
+    
+    if guild == 0:
+        return await render_template('chat.html', guilds=guilds)
+    else:
+        con.send(["give_channels", guild])
+        channels = await get_answer()
+        chn = random.choice([chn['id'] for chn in channels]) if chn == 0 else chn
+        con.send(["give_chat", chn])
+        chat = await get_answer()
+        
+
+        return await render_template('chat.html', guilds=guilds, channels=channels, chat=chat)
+
 
 
 @app.route('/about')

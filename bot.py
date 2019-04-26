@@ -47,9 +47,14 @@ class MyBot(commands.Bot):
                         "url": f"{'https://pmcvariety.files.wordpress.com/2018/05/discord-logo.jpg?' if not str(g.icon_url) else str(g.icon_url)}"} for g in self.guilds])
 
     async def on_give_channels(self, g_id):  # Pipe command
-        guild = self.get_guild(g_id)
-        chns = [[chn.name, chn.id] for chn in guild.text_channels]
+        guild = self.get_guild(int(g_id))
+        chns = [{"name": chn.name, "id": chn.id} for chn in guild.text_channels]
         self.con.send(chns)
+    
+    async def on_give_chat(self, chn_id):  # Pipe command
+        chn = self.get_channel(int(chn_id))
+        history = await chn.history(limit=100).flatten()
+        self.con.send([{"author": m.author.display_name, "content": m.content, "at": m.created_at, "link": str(m.author.avatar_url)} for m in history])
 
     async def on_ready(self):
         self.con.send("ready")
