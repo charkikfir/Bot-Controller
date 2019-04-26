@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+
+
+{% block content %}
+    <header class="servers-header">
+        {% for server in servers %}
+            <button class="btn btn-dark" onclick="location.href='{{server.id}}';" ><img src={{server.url}} height="42" width="42"> </a>
+        {% endfor %}
+    </header>
+{% endblock content %}

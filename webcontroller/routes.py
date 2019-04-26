@@ -12,12 +12,20 @@ from webcontroller.models import User
 from bot import start_bot
 
 
+connections = dict()
+
 #* Don't really have a use for that yet. Maybe the chat will be the default home later
 # @app.route('/home')
 # async def home():
 #     return await render_template('home.html', posts=posts)
+@app.route('/chat')
+@login_required
+async def chat():
+    con = get_con(current_user.get_id())
+    con.send("give_guilds")
+    servers = await get_answer() # servers is a list with dicts that contain the name and id of the guild [{"id": 123, "name": "name1"}, ]
+    return await render_template('chat.html', servers=servers)
 
-connections = dict()
 
 @app.route('/about')
 async def about():
@@ -54,7 +62,6 @@ async def login():
             
             login_user(user)
 
-            print(f"USER ID: {user.get_id()}")
             con = get_con(user.get_id())
             name = con.recv()
             await flash(f"Logged in as {name}", "success")

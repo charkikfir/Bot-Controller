@@ -1,9 +1,17 @@
 
-body {
+/* body {
   background: #fafafa;
   color: #333333;
   margin-top: 5rem;
+} */
+body {
+  background-color: #2C2F33;
 }
+.navbar-custom {
+			color:cornsilk;
+			background-color:#7289DA
+}
+    
 
 h1, h2, h3, h4, h5, h6 {
   color: #444444;
@@ -32,6 +40,7 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 3px;
   margin-bottom: 20px;
 }
+
 
 .article-title {
   color: #444444;

@@ -42,9 +42,10 @@ class MyBot(commands.Bot):
         await self.logout()
 
     async def on_give_guilds(self):  # Pipe command
-        self.con.send([[g.name, g.id] for g in self.guilds])
-        # self.con.send(self.guilds)
-    
+        self.con.send([{"id": g.id, 
+                        "name": g.name,
+                        "url": f"{'https://pmcvariety.files.wordpress.com/2018/05/discord-logo.jpg?' if not str(g.icon_url) else str(g.icon_url)}"} for g in self.guilds])
+
     async def on_give_channels(self, g_id):  # Pipe command
         guild = self.get_guild(g_id)
         chns = [[chn.name, chn.id] for chn in guild.text_channels]
